@@ -8,7 +8,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class CarBeanTest {
+public class CarBeanTest {
     private CarService carService = new CarBean();
 
     @Test
