@@ -11,23 +11,31 @@ buildscript {
     }
     dependencies {
         classpath 'org.junit.platform:junit-platform-gradle-plugin:1.0.1'
+        classpath 'org.liquibase:liquibase-gradle-plugin:1.2.4'
+        classpath 'org.postgresql:postgresql:9.4-1201-jdbc41'
     }
 }
 apply plugin: 'org.junit.platform.gradle.plugin'
+apply plugin: 'org.liquibase.gradle'
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
+    compileOnly(
+            'org.projectlombok:lombok:1.16.20'
+    )
     compile(
             'org.springframework:spring-core:5.0.2.RELEASE',
-            'org.springframework:spring-context:5.0.2.RELEASE'
+            'org.springframework:spring-context:5.0.2.RELEASE',
+            'org.postgresql:postgresql:9.4-1201-jdbc41'
     )
     testCompile(
             'org.junit.jupiter:junit-jupiter-api:5.0.1',
             'org.assertj:assertj-core:3.9.0',
-            'org.springframework:spring-test:5.0.2.RELEASE'
+            'org.springframework:spring-test:5.0.2.RELEASE',
+            "org.mockito:mockito-core:2.13.0"
     )
     testRuntime(
             'org.junit.jupiter:junit-jupiter-engine:5.0.1',
@@ -35,4 +43,15 @@ dependencies {
             'org.junit.platform:junit-platform-launcher:1.0.1',
             'org.junit.platform:junit-platform-runner:1.0.1'
     )
+}
+
+liquibase {
+    activities {
+        main {
+            changeLogFile 'src/main/java/car/rental/reborn/database/changelog/database.changelog-master.xml'
+            url 'jdbc:postgresql://localhost/car_rental_db'
+            username 'car_rental_user'
+            password 'abc123'
+        }
+    }
 }
